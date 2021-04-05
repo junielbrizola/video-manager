@@ -2,7 +2,7 @@ version: '3'
 
 services:
 
-    react:
+    react-development:
         build: 
             context: .
             dockerfile: ./Dockerfile.dev
