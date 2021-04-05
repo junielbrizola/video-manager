@@ -14,6 +14,9 @@ jobs:
       - name: Backend
         run: cd backend
 
+      - name: listing content foder
+        run: ls
+
       - name: Docker-compose down
         run: docker-compose -f docker-compose.prod.yml down
 
