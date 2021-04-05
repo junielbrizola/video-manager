@@ -1,15 +1,18 @@
 version: '3'
 
+volumes:
+    laravel:
+
 services:
 
     production-app:
-        build: 
-            context: .
-            dockerfile: ./Dockerfile.prod
+        image: junielbrizola/video-manager-production-app
         container_name: video-manager-production-app
         entrypoint: dockerize -template ./.docker/app/.env.prod:.env -wait tcp://production-mysql:3306 -timeout 40s ./.docker/entrypoint.sh
         ports:
             - "9000:9000"
+        volumes:
+            - laravel:/var/www
         networks:
             - app-network
         depends_on:
@@ -17,14 +20,12 @@ services:
             - production-redis
 
     production-nginx:
-        build: 
-            context: .
-            dockerfile: ./.docker/nginx/Dockerfile.prod
+        image: junielbrizola/video-manager-production-nginx
         container_name: video-manager-production-nginx
         restart: always
         tty: true
         volumes:
-            - .:/var/www
+            - laravel:/var/www
         ports:
             - "8000:80"
         environment:
@@ -35,9 +36,7 @@ services:
             - production-app
 
     production-mysql:
-        build: 
-            context: .
-            dockerfile: ./.docker/mysql/Dockerfile
+        image: junielbrizola/video-manager-production-mysql
         container_name: video-manager-production-mysql
         restart: always
         tty: true
@@ -50,9 +49,7 @@ services:
             - production-network
 
     production-redis:
-        build: 
-            context: .
-            dockerfile: ./.docker/redis/Dockerfile
+        image: junielbrizola/video-manager-production-redis
         container_name: video-manager-production-redis
         expose:
             - "6379"

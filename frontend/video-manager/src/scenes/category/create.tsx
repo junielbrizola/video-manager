@@ -53,7 +53,9 @@ const Create: FC<Props> = () => {
 
     const formRef = useRef<FormHandles>(null)
     
-    const { post, response, loading, error, data } = useFetch({})
+    const { post, response, loading, error, data } = useFetch({
+    
+    })
   
     const handleSubmit: SubmitHandler<FormData> = async (data) => {
         try {
