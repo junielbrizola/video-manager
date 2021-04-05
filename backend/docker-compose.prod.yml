@@ -2,25 +2,25 @@ version: '3'
 
 services:
 
-    app:
+    production-app:
         build: 
             context: .
             dockerfile: ./Dockerfile.prod
-        container_name: backend-video-manager-app
-        entrypoint: dockerize -wait tcp://mysql:3306 -timeout 40s ./.docker/entrypoint.sh
+        container_name: video-manager-production-app
+        entrypoint: dockerize -template ./.docker/app/.env.prod:.env -wait tcp://production-mysql:3306 -timeout 40s ./.docker/entrypoint.sh
         ports:
             - "9000:9000"
         networks:
             - app-network
         depends_on:
-            - mysql
-            - redis
+            - production-mysql
+            - production-redis
 
-    nginx:
+    production-nginx:
         build: 
             context: .
-            dockerfile: ./.docker/nginx/Dockerfile
-        container_name: backend-video-manager-nginx
+            dockerfile: ./.docker/nginx/Dockerfile.prod
+        container_name: video-manager-production-nginx
         restart: always
         tty: true
         volumes:
@@ -30,37 +30,37 @@ services:
         environment:
             - PORT=80
         networks:
-            - app-network
+            - production-network
         depends_on:
-            - app
+            - production-app
 
-    mysql:
+    production-mysql:
         build: 
             context: .
             dockerfile: ./.docker/mysql/Dockerfile
-        container_name: backend-video-manager-mysql
+        container_name: video-manager-production-mysql
         restart: always
         tty: true
         ports:
             - "3306:3306"
         environment:
-            - MYSQL_DATABASE=video_manager
+            - MYSQL_DATABASE=production-video-manager
             - MYSQL_ROOT_PASSWORD=root
         networks:
-            - app-network
+            - production-network
 
-    redis:
+    production-redis:
         build: 
             context: .
             dockerfile: ./.docker/redis/Dockerfile
-        container_name: backend-video-manager-redis
+        container_name: video-manager-production-redis
         expose:
             - "6379"
         ports:
             - "6379:6379"
         networks:
-            - app-network
+            - production-network
 
 networks:
-    app-network:
+    production-network:
         driver: bridge
