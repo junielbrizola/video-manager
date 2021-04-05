@@ -2,27 +2,27 @@ version: '3'
 
 services:
 
-    app:
+    development-app:
         build: 
             context: .
             dockerfile: ./Dockerfile.dev
-        container_name: backend-video-manager-app
-        entrypoint: dockerize -wait tcp://mysql:3306 -timeout 40s ./.docker/entrypoint.sh
+        container_name: video-manager-development-app
+        entrypoint: dockerize -template ./.docker/app/.env.dev:.env -wait tcp://development-mysql:3306 -timeout 40s ./.docker/entrypoint.sh
         volumes:
             - .:/var/www
         ports:
             - "9000:9000"
         networks:
-            - app-network
+            - development-network
         depends_on:
-            - mysql
-            - redis
+            - development-mysql
+            - development-redis
 
-    nginx:
+    development-nginx:
         build: 
             context: .
-            dockerfile: ./.docker/nginx/Dockerfile
-        container_name: backend-video-manager-nginx
+            dockerfile: ./.docker/nginx/Dockerfile.dev
+        container_name: video-manager-development-nginx
         restart: always
         tty: true
         volumes:
@@ -32,15 +32,15 @@ services:
         environment:
             - PORT=80
         networks:
-            - app-network
+            - development-network
         depends_on:
-            - app
+            - development-app
 
-    mysql:
+    development-mysql:
         build: 
             context: .
             dockerfile: ./.docker/mysql/Dockerfile
-        container_name: backend-video-manager-mysql
+        container_name: video-manager-development-mysql
         restart: always
         tty: true
         ports:
@@ -48,23 +48,23 @@ services:
         volumes:
             - ./.docker/mysql/dbdata:/var/lib/mysql
         environment:
-            - MYSQL_DATABASE=video_manager
+            - MYSQL_DATABASE=development-video-manager
             - MYSQL_ROOT_PASSWORD=root
         networks:
-            - app-network
+            - development-network
 
-    redis:
+    development-redis:
         build: 
             context: .
             dockerfile: ./.docker/redis/Dockerfile
-        container_name: backend-video-manager-redis
+        container_name: video-manager-development-redis
         expose:
             - "6379"
         ports:
             - "6379:6379"
         networks:
-            - app-network
+            - development-network
 
 networks:
-    app-network:
+    development-network:
         driver: bridge
