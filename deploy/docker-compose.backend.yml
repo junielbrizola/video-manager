@@ -1,0 +1,63 @@
+version: '3'
+
+volumes:
+    laravel:
+
+services:
+
+    production-app:
+        image: junielbrizola/video-manager-production-app
+        container_name: video-manager-production-app
+        entrypoint: dockerize -template ./.docker/app/.env.prod:.env -wait tcp://production-mysql:3306 -timeout 40s ./.docker/entrypoint.sh
+        ports:
+            - "9000:9000"
+        volumes:
+            - laravel:/var/www
+        networks:
+            - app-network
+        depends_on:
+            - production-mysql
+            - production-redis
+
+    production-nginx:
+        image: junielbrizola/video-manager-production-nginx
+        container_name: video-manager-production-nginx
+        restart: always
+        tty: true
+        volumes:
+            - laravel:/var/www
+        ports:
+            - "8000:80"
+        environment:
+            - PORT=80
+        networks:
+            - production-network
+        depends_on:
+            - production-app
+
+    production-mysql:
+        image: junielbrizola/video-manager-production-mysql
+        container_name: video-manager-production-mysql
+        restart: always
+        tty: true
+        ports:
+            - "3306:3306"
+        environment:
+            - MYSQL_DATABASE=production-video-manager
+            - MYSQL_ROOT_PASSWORD=root
+        networks:
+            - production-network
+
+    production-redis:
+        image: junielbrizola/video-manager-production-redis
+        container_name: video-manager-production-redis
+        expose:
+            - "6379"
+        ports:
+            - "6379:6379"
+        networks:
+            - production-network
+
+networks:
+    production-network:
+        driver: bridge
