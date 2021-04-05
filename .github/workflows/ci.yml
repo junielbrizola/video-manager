@@ -1,0 +1,83 @@
+name: ci-backend-video-manager
+on: 
+  pull_request:
+    branches:
+      - develop 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Backend
+        run: cd backend
+
+      - name: Docker-compose down
+        run: docker-compose -f docker-compose.prod.yml down
+
+      - name: Docker rmi backend_production-app
+        run: docker rmi backend_production-app
+  
+      - name: Docker rmi backend_production-nginx
+        run: docker rmi backend_production-nginx
+
+      - name: Docker rmi backend_production-mysql
+        run: docker rmi backend_production-mysql
+
+      - name: Docker rmi backend_production-redis
+        run: docker rmi backend_production-redis
+
+      - name: Docker-compose up
+        run: docker-compose -f docker-compose.prod.yml up -d
+      
+      - name: Frontend
+        run: cd ../frontend
+
+      - name: Docker-compose down
+        run: docker-compose -f docker-compose.prod.yml down
+
+      - name: Docker rmi frontend_production-react
+        run: docker rmi frontend_production-react
+
+      - name: Docker-compose up
+        run: docker-compose -f docker-compose.prod.yml up -d
+      
+      - name: Docker login
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }} docker.io
+
+      - name: Docker tag backend_production-app
+        run: docker tag backend_production-app ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-app:latest
+  
+      - name: Docker tag backend_production-nginx
+        run: docker tag backend_production-nginx ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-nginx:latest
+
+      - name: Docker tag backend_production-mysql
+        run: docker tag backend_production-mysql ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-mysql:latest
+
+      - name: Docker tag backend_production-redis
+        run: docker tag backend_production-redis ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-redis:latest
+   
+      - name: Docker tag frontend_production-react
+        run: docker tag frontend_production-react ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-react:latest
+   
+       - name: Docker push video-manager-production-app:latest
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-app:latest
+  
+      - name: Docker push video-manager-production-nginx:latest
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-nginx:latest
+
+      - name: Docker push video-manager-production-mysql:latest
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-mysql:latest
+
+      - name: Docker push video-manager-redis:latest
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-redis:latest
+   
+      - name: Docker push video-manager-react:latest
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-react:latest
+   
+
+
+
+     
