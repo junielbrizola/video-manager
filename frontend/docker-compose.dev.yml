@@ -2,11 +2,11 @@ version: '3'
 
 services:
 
-    app:
+    react:
         build: 
             context: .
             dockerfile: ./Dockerfile.dev
-        container_name: frontend-video-manager-app
+        container_name: video-manager-development-react
         volumes:
             - ./video-manager:/app
         tty: true

@@ -2,11 +2,11 @@ version: '3'
 
 services:
             
-    nginx:
+    react:
         build: 
             context: .
             dockerfile: ./Dockerfile.prod
-        container_name: frontend-video-manager-nginx
+        container_name: video-manager-production-react
         ports:
             - "80:80"
         tty: true
