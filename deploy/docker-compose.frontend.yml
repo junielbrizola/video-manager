@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+            
+    production-react:
+        image: junielbrizola/video-manager-production-react
+        container_name: video-manager-production-react
+        ports:
+            - "80:80"
+        tty: true
+        restart: always
