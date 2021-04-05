@@ -14,20 +14,8 @@ jobs:
       - name: Docker-compose down
         run: cd backend && docker-compose -f docker-compose.prod.yml down
 
-      - name: Docker rmi backend_production-app
-        run: docker rmi backend_production-app:latest
-  
-      - name: Docker rmi backend_production-nginx
-        run: docker rmi backend_production-nginx:latest
-
-      - name: Docker rmi backend_production-mysql
-        run: docker rmi backend_production-mysql:latest
-
-      - name: Docker rmi backend_production-redis
-        run: docker rmi backend_production-redis:latest
-
-      - name: Docker-compose up
-        run: cd backend && docker-compose -f docker-compose.prod.yml up -d
+      - name: Docker-compose --build --no-cache
+        run: cd backend && docker-compose -f docker-compose.prod.yml --build --no-cache
 
       - name: Docker-compose down
         run: cd frontend && docker-compose -f docker-compose.prod.yml down
@@ -35,8 +23,8 @@ jobs:
       - name: Docker rmi frontend_production-react
         run: docker rmi frontend_production-react:latest
 
-      - name: Docker-compose up
-        run: cd frontend && docker-compose -f docker-compose.prod.yml up -d
+      - name: Docker-compose --build --no-cache
+        run: cd frontend && docker-compose -f docker-compose.prod.yml --build --no-cache
       
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }} docker.io
