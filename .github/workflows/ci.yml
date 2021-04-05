@@ -1,8 +1,8 @@
 name: ci-backend-video-manager
 on: 
-  pull_request:
+  push:
     branches:
-      - develop 
+      - feature/ci 
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -11,38 +11,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
-      - name: Backend
-        run: cd backend
+      - name: Docker-compose down
+        run: cd backend && docker-compose -f docker-compose.prod.yml down
+
+      - name: Docker-compose build --no-cache
+        run: cd backend && docker-compose -f docker-compose.prod.yml build --no-cache
 
       - name: Docker-compose down
-        run: docker-compose -f docker-compose.prod.yml down
+        run: cd frontend && docker-compose -f docker-compose.prod.yml down
 
-      - name: Docker rmi backend_production-app
-        run: docker rmi backend_production-app
-  
-      - name: Docker rmi backend_production-nginx
-        run: docker rmi backend_production-nginx
-
-      - name: Docker rmi backend_production-mysql
-        run: docker rmi backend_production-mysql
-
-      - name: Docker rmi backend_production-redis
-        run: docker rmi backend_production-redis
-
-      - name: Docker-compose up
-        run: docker-compose -f docker-compose.prod.yml up -d
-      
-      - name: Frontend
-        run: cd ../frontend
-
-      - name: Docker-compose down
-        run: docker-compose -f docker-compose.prod.yml down
-
-      - name: Docker rmi frontend_production-react
-        run: docker rmi frontend_production-react
-
-      - name: Docker-compose up
-        run: docker-compose -f docker-compose.prod.yml up -d
+      - name: Docker-compose build --no-cache
+        run: cd frontend && docker-compose -f docker-compose.prod.yml build --no-cache
       
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }} docker.io
@@ -62,7 +41,7 @@ jobs:
       - name: Docker tag frontend_production-react
         run: docker tag frontend_production-react ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-react:latest
    
-       - name: Docker push video-manager-production-app:latest
+      - name: Docker push video-manager-production-app:latest
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-app:latest
   
       - name: Docker push video-manager-production-nginx:latest

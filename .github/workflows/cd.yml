@@ -17,15 +17,10 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd deploy
+            cd video-manager/deploy
             docker-compose -f docker-compose.backend.yml down
             docker-compose -f docker-compose.frontend.yml down
             docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }} docker.io
-            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-app:latest
-            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-mysql:latest
-            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-nginx:latest  
-            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-redis:latest
-            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-react:latest
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-app:latest
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-mysql:latest
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-nginx:latest  
