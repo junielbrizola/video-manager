@@ -62,7 +62,7 @@ jobs:
       - name: Docker tag frontend_production-react
         run: docker tag frontend_production-react ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-react:latest
    
-       - name: Docker push video-manager-production-app:latest
+      - name: Docker push video-manager-production-app:latest
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-app:latest
   
       - name: Docker push video-manager-production-nginx:latest
