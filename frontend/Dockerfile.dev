@@ -1,0 +1,6 @@
+FROM node:14-alpine as build
+WORKDIR /app
+COPY ./video-manager .
+RUN rm -rf node_modules
+RUN npm i
+CMD [ "npm", "run", "start" ]

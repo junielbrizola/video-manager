@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+            
+    nginx:
+        build: 
+            context: .
+            dockerfile: ./Dockerfile.prod
+        container_name: frontend-video-manager-nginx
+        ports:
+            - "80:80"
+        tty: true
+        restart: always
