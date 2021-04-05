@@ -15,16 +15,16 @@ jobs:
         run: cd backend && docker-compose -f docker-compose.prod.yml down
 
       - name: Docker rmi backend_production-app
-        run: docker rmi backend_production-app
+        run: docker rmi backend_production-app:latest
   
       - name: Docker rmi backend_production-nginx
-        run: docker rmi backend_production-nginx
+        run: docker rmi backend_production-nginx:latest
 
       - name: Docker rmi backend_production-mysql
-        run: docker rmi backend_production-mysql
+        run: docker rmi backend_production-mysql:latest
 
       - name: Docker rmi backend_production-redis
-        run: docker rmi backend_production-redis
+        run: docker rmi backend_production-redis:latest
 
       - name: Docker-compose up
         run: cd backend && docker-compose -f docker-compose.prod.yml up -d
@@ -33,7 +33,7 @@ jobs:
         run: cd frontend && docker-compose -f docker-compose.prod.yml down
 
       - name: Docker rmi frontend_production-react
-        run: docker rmi frontend_production-react
+        run: docker rmi frontend_production-react:latest
 
       - name: Docker-compose up
         run: cd frontend && docker-compose -f docker-compose.prod.yml up -d
