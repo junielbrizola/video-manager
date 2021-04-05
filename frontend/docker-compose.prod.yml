@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+            
+    react-production:
+        build: 
+            context: .
+            dockerfile: ./Dockerfile.prod
+        container_name: video-manager-production-react
+        ports:
+            - "80:80"
+        tty: true
+        restart: always
