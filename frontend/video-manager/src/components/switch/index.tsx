@@ -12,7 +12,7 @@ const Input: FC<InputProps> = ({ name, color='primary', ...rest }) => {
 
     const inputRef = useRef<HTMLInputElement>(null)
     const { fieldName, defaultValue, registerField } = useField(name)
-    const [ value, setValue ] = useState<boolean>(false)
+    const [ value, setValue ] = useState<boolean>(true)
 
     useEffect(() => {
         registerField({

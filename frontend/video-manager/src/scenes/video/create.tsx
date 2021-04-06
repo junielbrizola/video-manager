@@ -17,6 +17,7 @@ import * as Yup from 'yup';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import { ICategory, ITag } from '../../context';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 type Props = {
 
@@ -144,9 +145,14 @@ const Create: FC<Props> = () => {
                             rowsMax={4}
                             multiline
                         />
-                        <Switch 
-                            className={classes.input}
-                            name="is_active" 
+                        <FormControlLabel 
+                            control={
+                                <Switch 
+                                    className={classes.input}
+                                    name="is_active" 
+                                />
+                            } 
+                            label="Status" 
                         />
                         <Select 
                             className={classes.input}

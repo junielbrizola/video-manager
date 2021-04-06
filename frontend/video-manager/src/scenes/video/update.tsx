@@ -20,6 +20,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { ICategory, ITag } from '../../context';
 import Select from '../../components/select'
 import Switch from '../../components/switch'
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 type Props = {
 
@@ -191,9 +192,14 @@ const Update: FC<Props> = () => {
                                 rowsMax={4}
                                 multiline
                             />
-                            <Switch 
-                                className={classes.input}
-                                name="is_active" 
+                            <FormControlLabel 
+                                control={
+                                    <Switch 
+                                        className={classes.input}
+                                        name="is_active" 
+                                    />
+                                } 
+                                label="Status" 
                             />
                             <Select 
                                 className={classes.input}
