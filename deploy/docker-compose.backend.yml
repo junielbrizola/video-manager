@@ -14,7 +14,7 @@ services:
         volumes:
             - laravel:/var/www
         networks:
-            - app-network
+            - production-network
         depends_on:
             - production-mysql
             - production-redis
