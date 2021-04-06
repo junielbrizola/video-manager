@@ -20,6 +20,11 @@ jobs:
             cd video-manager/deploy
             docker-compose -f docker-compose.backend.yml down
             docker-compose -f docker-compose.frontend.yml down
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-app:latest
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-mysql:latest
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-nginx:latest  
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-redis:latest
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-react:latest
             docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }} docker.io
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-app:latest
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/video-manager-production-mysql:latest

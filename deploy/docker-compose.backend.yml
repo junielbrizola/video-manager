@@ -2,6 +2,7 @@ version: '3'
 
 volumes:
     laravel:
+    mysql-dbdata:
 
 services:
 
@@ -42,6 +43,8 @@ services:
         tty: true
         ports:
             - "3306:3306"
+        volumes:
+            - mysql-dbdata:/var/lib/mysql
         environment:
             - MYSQL_DATABASE=production-video-manager
             - MYSQL_ROOT_PASSWORD=root
